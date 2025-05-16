@@ -1,0 +1,1409 @@
+@prefix : <http://ju.se/Ontology-BasedAccessControlModule#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix odrl: <http://www.w3.org/ns/odrl/2/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix swrl: <http://www.w3.org/2003/11/swrl#> .
+@prefix OBACM: <http://ju.se/Ontology-BasedAccessControlModule#> .
+@prefix swrla: <http://swrl.stanford.edu/ontologies/3.3/swrla.owl#> .
+@prefix swrlb: <http://www.w3.org/2003/11/swrlb#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix opla-sd: <http://ontologydesignpatterns.org/opla-sd#> .
+@base <http://ju.se/Ontology-BasedAccessControlModule#> .
+
+<http://ju.se/Ontology-BasedAccessControlModule#> rdf:type owl:Ontology ;
+                                                   owl:versionIRI :v1 ;
+                                                   owl:imports odrl: ,
+                                                               <http://www.w3.org/ns/prov#> ;
+                                                   dcterms:creator "Bincy Veena" ,
+                                                                   "Vineetha Shajan" ;
+                                                   dcterms:contributor "Rahel Kebede" ,
+                                                                        "Peter Johansson" ,
+                                                                        "Annika Moscati" ;
+                                                   dcterms:created "2025-05-15"^^xsd:date ;
+                                                   dcterms:description "This ontology is a semantic model that enables dynamic, role- and context-based access control for Digital Product Passports within Built environment." ;
+                                                   dcterms:license <https://creativecommons.org/licenses/by/4.0/> ;
+                                                   dcterms:title "Digital Product Passport – Access Control Ontology Module" ;
+                                                   owl:versionInfo "1.0" .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://ontologydesignpatterns.org/opla-sd#entityPosition
+opla-sd:entityPosition rdf:type owl:AnnotationProperty .
+
+
+###  http://ontologydesignpatterns.org/opla-sd#entityPositionX
+opla-sd:entityPositionX rdf:type owl:AnnotationProperty .
+
+
+###  http://ontologydesignpatterns.org/opla-sd#entityPositionY
+opla-sd:entityPositionY rdf:type owl:AnnotationProperty .
+
+
+###  http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled
+swrla:isRuleEnabled rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/ns/odrl/2/function
+odrl:function rdf:type owl:AnnotationProperty .
+
+
+###  http://www.w3.org/ns/odrl/2/relation
+odrl:relation rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://ju.se/Ontology-BasedAccessControlModule#assigneeRole
+OBACM:assigneeRole rdf:type owl:ObjectProperty ,
+                            owl:FunctionalProperty ,
+                            owl:AsymmetricProperty ,
+                            owl:IrreflexiveProperty ;
+                   rdfs:domain odrl:Policy ;
+                   rdfs:range OBACM:UserRole ;
+                   rdfs:comment "Specifies the role held by the assignee in the context of the policy, indicating their function or responsibility with respect to the granted permissions." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#generatedDecision
+OBACM:generatedDecision rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasGeneratedBy> ,
+                                           <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                        rdfs:domain OBACM:AccessDecisionEntity ,
+                                    <http://www.w3.org/ns/prov#Entity> ,
+                                    [ rdf:type owl:Class ;
+                                      owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                    <http://www.w3.org/ns/prov#Agent>
+                                                    <http://www.w3.org/ns/prov#Entity>
+                                                  )
+                                    ] ;
+                        rdfs:range OBACM:UserRequestAction ,
+                                   <http://www.w3.org/ns/prov#Activity> ,
+                                   [ rdf:type owl:Class ;
+                                     owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                   <http://www.w3.org/ns/prov#Agent>
+                                                   <http://www.w3.org/ns/prov#Entity>
+                                                 )
+                                   ] ;
+                        rdfs:comment "Links a decision outcome to the access activity that produced it." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#hasCondition
+OBACM:hasCondition rdf:type owl:ObjectProperty ,
+                            owl:AsymmetricProperty ,
+                            owl:IrreflexiveProperty ;
+                   rdfs:domain odrl:Policy ;
+                   rdfs:range OBACM:Context ;
+                   rdfs:comment "Links a policy or rule to a condition that must be satisfied for the associated permissions or constraints to apply." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#hasContext
+OBACM:hasContext rdf:type owl:ObjectProperty ,
+                          owl:AsymmetricProperty ,
+                          owl:IrreflexiveProperty ;
+                 rdfs:domain odrl:Party ;
+                 rdfs:range OBACM:Context ;
+                 rdfs:comment "Links a user to contextual information that may influence access control decisions." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#hasRole
+OBACM:hasRole rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ,
+                       owl:AsymmetricProperty ,
+                       owl:IrreflexiveProperty ;
+              rdfs:domain OBACM:User ,
+                          odrl:Party ,
+                          <http://www.w3.org/ns/prov#Agent> ,
+                          [ rdf:type owl:Class ;
+                            owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                          <http://www.w3.org/ns/prov#Agent>
+                                          <http://www.w3.org/ns/prov#Entity>
+                                        )
+                          ] ;
+              rdfs:range OBACM:UserRole ;
+              rdfs:comment "Associates a user with a specific role within the system for access control purposes." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#requestedAction
+OBACM:requestedAction rdf:type owl:ObjectProperty ,
+                               owl:FunctionalProperty ,
+                               owl:AsymmetricProperty ,
+                               owl:IrreflexiveProperty ;
+                      rdfs:domain OBACM:UserRequestAction ,
+                                  <http://www.w3.org/ns/prov#Activity> ,
+                                  [ rdf:type owl:Class ;
+                                    owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                  <http://www.w3.org/ns/prov#Agent>
+                                                  <http://www.w3.org/ns/prov#Entity>
+                                                )
+                                  ] ;
+                      rdfs:range odrl:Action ;
+                      rdfs:comment "Links a request to the specific action being requested by the user." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#requestedAsset
+OBACM:requestedAsset rdf:type owl:ObjectProperty ,
+                              owl:FunctionalProperty ,
+                              owl:AsymmetricProperty ,
+                              owl:IrreflexiveProperty ;
+                     rdfs:domain OBACM:UserRequestAction ,
+                                 <http://www.w3.org/ns/prov#Activity> ,
+                                 [ rdf:type owl:Class ;
+                                   owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                 <http://www.w3.org/ns/prov#Agent>
+                                                 <http://www.w3.org/ns/prov#Entity>
+                                               )
+                                 ] ;
+                     rdfs:range OBACM:DPPModules ,
+                                odrl:Asset ;
+                     rdfs:comment "Connects a request to the asset that the user wants to access or manipulate." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#requestedBy
+OBACM:requestedBy rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf <http://www.w3.org/ns/prov#wasAssociatedWith> ,
+                                     <http://www.w3.org/ns/prov#wasInfluencedBy> ;
+                  rdf:type owl:FunctionalProperty ,
+                           owl:AsymmetricProperty ,
+                           owl:IrreflexiveProperty ;
+                  rdfs:domain OBACM:UserRequestAction ,
+                              <http://www.w3.org/ns/prov#Activity> ,
+                              [ rdf:type owl:Class ;
+                                owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                              <http://www.w3.org/ns/prov#Agent>
+                                              <http://www.w3.org/ns/prov#Entity>
+                                            )
+                              ] ;
+                  rdfs:range OBACM:User ,
+                             odrl:Party ,
+                             <http://www.w3.org/ns/prov#Agent> ,
+                             [ rdf:type owl:Class ;
+                               owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                             <http://www.w3.org/ns/prov#Agent>
+                                             <http://www.w3.org/ns/prov#Entity>
+                                           )
+                             ] ;
+                  rdfs:comment "Indicates who performed the access request activity." .
+
+
+###  http://www.w3.org/ns/odrl/2/action
+odrl:action rdf:type owl:ObjectProperty ,
+                     owl:FunctionalProperty ,
+                     owl:AsymmetricProperty ,
+                     owl:IrreflexiveProperty ;
+            rdfs:domain odrl:Permission ;
+            rdfs:range odrl:Action ;
+            rdfs:comment "An object property that links a rule (e.g., a Permission or Prohibition) to the action that is being regulated, such as 'use', 'delete', or 'transfer'.\"" .
+
+
+###  http://www.w3.org/ns/odrl/2/assignee
+odrl:assignee rdf:type owl:ObjectProperty ,
+                       owl:IrreflexiveProperty ;
+              rdfs:domain odrl:Policy ;
+              rdfs:range OBACM:User ,
+                         odrl:Party ,
+                         <http://www.w3.org/ns/prov#Agent> ,
+                         [ rdf:type owl:Class ;
+                           owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                         <http://www.w3.org/ns/prov#Agent>
+                                         <http://www.w3.org/ns/prov#Entity>
+                                       )
+                         ] ;
+              rdfs:comment "Relates a Policy to the User or agent that is granted the right to perform the specified actions defined in the policy." .
+
+
+###  http://www.w3.org/ns/odrl/2/assigner
+odrl:assigner rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ,
+                       owl:AsymmetricProperty ,
+                       owl:IrreflexiveProperty ;
+              rdfs:domain odrl:Policy .
+
+
+###  http://www.w3.org/ns/odrl/2/hasPolicy
+odrl:hasPolicy rdf:type owl:ObjectProperty ,
+                        owl:AsymmetricProperty ,
+                        owl:IrreflexiveProperty ;
+               rdfs:domain odrl:Permission ;
+               rdfs:range odrl:Policy .
+
+
+###  http://www.w3.org/ns/odrl/2/permission
+odrl:permission rdf:type owl:ObjectProperty ,
+                         owl:FunctionalProperty ,
+                         owl:AsymmetricProperty ,
+                         owl:IrreflexiveProperty ;
+                rdfs:domain odrl:Policy ;
+                rdfs:range odrl:Permission ;
+                rdfs:comment "Specifies the permissions granted by a policy, typically linking to an ODRL Permission instance that defines allowed actions." .
+
+
+###  http://www.w3.org/ns/odrl/2/prohibition
+odrl:prohibition rdf:type owl:ObjectProperty ,
+                          owl:AsymmetricProperty ,
+                          owl:IrreflexiveProperty .
+
+
+###  http://www.w3.org/ns/odrl/2/target
+odrl:target rdf:type owl:ObjectProperty ,
+                     owl:AsymmetricProperty ,
+                     owl:IrreflexiveProperty ;
+            rdfs:domain odrl:Permission ;
+            rdfs:range OBACM:DPPModules ,
+                       odrl:Asset ;
+            rdfs:comment "Specifies the asset that a rule (permission, prohibition, or obligation) applies to." .
+
+
+###  http://www.w3.org/ns/prov#used
+<http://www.w3.org/ns/prov#used> rdfs:domain [ rdf:type owl:Class ;
+                                               owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                             <http://www.w3.org/ns/prov#Agent>
+                                                             <http://www.w3.org/ns/prov#Entity>
+                                                           )
+                                             ] ;
+                                 rdfs:range [ rdf:type owl:Class ;
+                                              owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                            <http://www.w3.org/ns/prov#Agent>
+                                                            <http://www.w3.org/ns/prov#Entity>
+                                                          )
+                                            ] .
+
+
+###  http://www.w3.org/ns/prov#wasAssociatedWith
+<http://www.w3.org/ns/prov#wasAssociatedWith> rdfs:domain [ rdf:type owl:Class ;
+                                                            owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                          <http://www.w3.org/ns/prov#Agent>
+                                                                          <http://www.w3.org/ns/prov#Entity>
+                                                                        )
+                                                          ] ;
+                                              rdfs:range [ rdf:type owl:Class ;
+                                                           owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                         <http://www.w3.org/ns/prov#Agent>
+                                                                         <http://www.w3.org/ns/prov#Entity>
+                                                                       )
+                                                         ] .
+
+
+###  http://www.w3.org/ns/prov#wasGeneratedBy
+<http://www.w3.org/ns/prov#wasGeneratedBy> rdfs:domain [ rdf:type owl:Class ;
+                                                         owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                       <http://www.w3.org/ns/prov#Agent>
+                                                                       <http://www.w3.org/ns/prov#Entity>
+                                                                     )
+                                                       ] ;
+                                           rdfs:range [ rdf:type owl:Class ;
+                                                        owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                      <http://www.w3.org/ns/prov#Agent>
+                                                                      <http://www.w3.org/ns/prov#Entity>
+                                                                    )
+                                                      ] .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://ju.se/Ontology-BasedAccessControlModule#isPermitted
+OBACM:isPermitted rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain OBACM:UserRequestAction ,
+                              <http://www.w3.org/ns/prov#Activity> ,
+                              [ rdf:type owl:Class ;
+                                owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                              <http://www.w3.org/ns/prov#Agent>
+                                              <http://www.w3.org/ns/prov#Entity>
+                                            )
+                              ] ;
+                  rdfs:range xsd:boolean ;
+                  opla-sd:entityPosition [ opla-sd:entityPositionX "429.635084042631"^^xsd:double ;
+                                           opla-sd:entityPositionY "39.720426655858034"^^xsd:double ;
+                                           rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                         ] ;
+                  rdfs:comment "Indicates whether a given access request is permitted according to the defined policies." ;
+                  rdfs:label "isPermitted" .
+
+
+###  http://www.w3.org/ns/prov#generatedAtTime
+<http://www.w3.org/ns/prov#generatedAtTime> rdfs:domain [ rdf:type owl:Class ;
+                                                          owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                        <http://www.w3.org/ns/prov#Agent>
+                                                                        <http://www.w3.org/ns/prov#Entity>
+                                                                      )
+                                                        ] .
+
+
+###  http://www.w3.org/ns/prov#startedAtTime
+<http://www.w3.org/ns/prov#startedAtTime> rdf:type owl:FunctionalProperty ;
+                                          rdfs:domain [ rdf:type owl:Class ;
+                                                        owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                      <http://www.w3.org/ns/prov#Agent>
+                                                                      <http://www.w3.org/ns/prov#Entity>
+                                                                    )
+                                                      ] .
+
+
+###  http://www.w3.org/ns/prov#value
+<http://www.w3.org/ns/prov#value> rdf:type owl:FunctionalProperty ;
+                                  rdfs:domain [ rdf:type owl:Class ;
+                                                owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                              <http://www.w3.org/ns/prov#Agent>
+                                                              <http://www.w3.org/ns/prov#Entity>
+                                                            )
+                                              ] ;
+                                  rdfs:range xsd:string .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://ju.se/Ontology-BasedAccessControlModule#AccessControlPolicy
+OBACM:AccessControlPolicy rdf:type owl:Class ;
+                          rdfs:subClassOf odrl:Policy ,
+                                          [ rdf:type owl:Restriction ;
+                                            owl:onProperty odrl:permission ;
+                                            owl:someValuesFrom odrl:Permission
+                                          ] ;
+                          opla-sd:entityPosition [ opla-sd:entityPositionX "600.2936540375185"^^xsd:double ;
+                                                   opla-sd:entityPositionY "629.9998672076415"^^xsd:double ;
+                                                   rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                                 ] ;
+                          rdfs:comment "Policies tailored to DPPs conforming to ESPR" .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#AccessDecisionEntity
+OBACM:AccessDecisionEntity rdf:type owl:Class ;
+                           rdfs:subClassOf <http://www.w3.org/ns/prov#Entity> ,
+                                           [ rdf:type owl:Class ;
+                                             owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                           <http://www.w3.org/ns/prov#Agent>
+                                                           <http://www.w3.org/ns/prov#Entity>
+                                                         )
+                                           ] ;
+                           opla-sd:entityPosition [ opla-sd:entityPositionX "56.00845630731316"^^xsd:double ;
+                                                    opla-sd:entityPositionY "130.11862303841394"^^xsd:double ;
+                                                    rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                                  ] ;
+                           rdfs:comment "Represents the outcome of evaluating an access request." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Context
+OBACM:Context rdf:type owl:Class ;
+              rdfs:subClassOf owl:Thing ;
+              opla-sd:entityPosition [ opla-sd:entityPositionX "350.14704296319564"^^xsd:double ;
+                                       opla-sd:entityPositionY "600.0443325899658"^^xsd:double ;
+                                       rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                     ] ;
+              rdfs:comment "Metadata associated with the users, such as, certification, affiliations etc." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#DPPModules
+OBACM:DPPModules rdf:type owl:Class ;
+                 rdfs:subClassOf odrl:Asset ;
+                 opla-sd:entityPosition [ opla-sd:entityPositionX "19.81731914528004"^^xsd:double ;
+                                          opla-sd:entityPositionY "349.60156377860636"^^xsd:double ;
+                                          rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                        ] ;
+                 rdfs:comment "A collection of digital product passport (DPP) modules that contain structured information about the lifecycle, components, and provenance of a product." ;
+                 rdfs:label "DPPModules" .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#User
+OBACM:User rdf:type owl:Class ;
+           rdfs:subClassOf odrl:Party ,
+                           <http://www.w3.org/ns/prov#Agent> ,
+                           [ rdf:type owl:Class ;
+                             owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                           <http://www.w3.org/ns/prov#Agent>
+                                           <http://www.w3.org/ns/prov#Entity>
+                                         )
+                           ] ,
+                           [ rdf:type owl:Class ;
+                             owl:unionOf ( [ rdf:type owl:Restriction ;
+                                             owl:onProperty OBACM:hasContext ;
+                                             owl:someValuesFrom OBACM:Context
+                                           ]
+                                           [ rdf:type owl:Restriction ;
+                                             owl:onProperty OBACM:hasRole ;
+                                             owl:someValuesFrom OBACM:UserRole
+                                           ]
+                                         )
+                           ] ;
+           opla-sd:entityPosition [ opla-sd:entityPositionX "100.40000455473648"^^xsd:double ;
+                                    opla-sd:entityPositionY "569.6218474339889"^^xsd:double ;
+                                    rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                  ] ;
+           rdfs:comment "User represents a person who requests an action." .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#UserRequestAction
+OBACM:UserRequestAction rdf:type owl:Class ;
+                        rdfs:subClassOf owl:Thing ,
+                                        <http://www.w3.org/ns/prov#Activity> ,
+                                        [ rdf:type owl:Class ;
+                                          owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                        <http://www.w3.org/ns/prov#Agent>
+                                                        <http://www.w3.org/ns/prov#Entity>
+                                                      )
+                                        ] ,
+                                        [ rdf:type owl:Restriction ;
+                                          owl:onProperty OBACM:requestedAsset ;
+                                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                          owl:onClass OBACM:DPPModules
+                                        ] ;
+                        opla-sd:entityPosition [ opla-sd:entityPositionX "210.2135864813904"^^xsd:double ;
+                                                 opla-sd:entityPositionY "99.79687630953471"^^xsd:double ;
+                                                 rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                               ] ;
+                        rdfs:comment "Represents the request made by teh user to access data within DPP, also a provenance activity" .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#UserRole
+OBACM:UserRole rdf:type owl:Class ;
+               rdfs:subClassOf owl:Thing ;
+               owl:disjointWith odrl:Party ;
+               opla-sd:entityPosition [ opla-sd:entityPositionX "239.7852667209255"^^xsd:double ;
+                                        opla-sd:entityPositionY "640.3043222624462"^^xsd:double ;
+                                        rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                      ] ;
+               rdfs:comment "Represents a specific role assigned to a user within the OBACM system, determining their access rights and permitted actions over digital product passport data." .
+
+
+###  http://www.w3.org/2002/07/owl#Thing
+owl:Thing opla-sd:entityPosition [ opla-sd:entityPositionX "700.3292466020996"^^xsd:double ;
+                                   opla-sd:entityPositionY "129.652153017148"^^xsd:double ;
+                                   rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                 ] .
+
+
+###  http://www.w3.org/ns/odrl/2/Action
+odrl:Action rdf:type owl:Class ;
+            rdfs:subClassOf owl:Thing ;
+            opla-sd:entityPosition [ opla-sd:entityPositionX "210.3283092568812"^^xsd:double ;
+                                     opla-sd:entityPositionY "290.3700932694753"^^xsd:double ;
+                                     rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                   ] .
+
+
+###  http://www.w3.org/ns/odrl/2/Asset
+odrl:Asset rdf:type owl:Class ;
+           rdfs:subClassOf owl:Thing ;
+           opla-sd:entityPosition [ opla-sd:entityPositionX "19.977081972278256"^^xsd:double ;
+                                    opla-sd:entityPositionY "169.67532082739524"^^xsd:double ;
+                                    rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                  ] .
+
+
+###  http://www.w3.org/ns/odrl/2/Party
+odrl:Party rdf:type owl:Class ;
+           rdfs:subClassOf owl:Thing ;
+           opla-sd:entityPosition [ opla-sd:entityPositionX "49.6444780131979"^^xsd:double ;
+                                    opla-sd:entityPositionY "449.99634777316237"^^xsd:double ;
+                                    rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                  ] .
+
+
+###  http://www.w3.org/ns/odrl/2/Permission
+odrl:Permission rdf:type owl:Class ;
+                rdfs:subClassOf owl:Thing ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty odrl:action ;
+                                  owl:someValuesFrom odrl:Action
+                                ] ;
+                opla-sd:entityPosition [ opla-sd:entityPositionX "380.09698079370156"^^xsd:double ;
+                                         opla-sd:entityPositionY "519.5956514275273"^^xsd:double ;
+                                         rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                       ] .
+
+
+###  http://www.w3.org/ns/odrl/2/Policy
+odrl:Policy rdf:type owl:Class ;
+            rdfs:subClassOf owl:Thing ;
+            opla-sd:entityPosition [ opla-sd:entityPositionX "630.184896582791"^^xsd:double ;
+                                     opla-sd:entityPositionY "349.5543471472249"^^xsd:double ;
+                                     rdfs:comment "This is an entity positioning annotation generated by CoModIDE (https://comodide.com/). Removing this annotation will break rendering the CoModIDE schema diagram view."@en
+                                   ] .
+
+
+###  http://www.w3.org/ns/prov#Activity
+<http://www.w3.org/ns/prov#Activity> rdfs:subClassOf [ rdf:type owl:Class ;
+                                                       owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                     <http://www.w3.org/ns/prov#Agent>
+                                                                     <http://www.w3.org/ns/prov#Entity>
+                                                                   )
+                                                     ] .
+
+
+###  http://www.w3.org/ns/prov#Agent
+<http://www.w3.org/ns/prov#Agent> rdfs:subClassOf [ rdf:type owl:Class ;
+                                                    owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                  <http://www.w3.org/ns/prov#Agent>
+                                                                  <http://www.w3.org/ns/prov#Entity>
+                                                                )
+                                                  ] .
+
+
+###  http://www.w3.org/ns/prov#Entity
+<http://www.w3.org/ns/prov#Entity> rdfs:subClassOf [ rdf:type owl:Class ;
+                                                     owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                   <http://www.w3.org/ns/prov#Agent>
+                                                                   <http://www.w3.org/ns/prov#Entity>
+                                                                 )
+                                                   ] .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://ju.se/Ontology-BasedAccessControlModule#AllDataWithinDPP
+OBACM:AllDataWithinDPP rdf:type owl:NamedIndividual ,
+                                OBACM:DPPModules ,
+                                odrl:Asset .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CertifiedDistributor
+OBACM:CertifiedDistributor rdf:type owl:NamedIndividual ,
+                                    OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CertifiedImporter
+OBACM:CertifiedImporter rdf:type owl:NamedIndividual ,
+                                 OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CertifiedMaintenanceTechnician
+OBACM:CertifiedMaintenanceTechnician rdf:type owl:NamedIndividual ,
+                                              OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CertifiedMaketSurveilanceAgency
+OBACM:CertifiedMaketSurveilanceAgency rdf:type owl:NamedIndividual ,
+                                               OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CertifiedManufacturer
+OBACM:CertifiedManufacturer rdf:type owl:NamedIndividual ,
+                                     OBACM:Context ,
+                                     odrl:Policy .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CertifiedRecycler
+OBACM:CertifiedRecycler rdf:type owl:NamedIndividual ,
+                                 OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CertifiedServiceProvider
+OBACM:CertifiedServiceProvider rdf:type owl:NamedIndividual ,
+                                        OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CreateDataWithinDPP
+OBACM:CreateDataWithinDPP rdf:type owl:NamedIndividual ,
+                                   odrl:Permission ;
+                          owl:sameAs OBACM:EditDataWithinDPP ,
+                                     OBACM:ModifyDataWithinDPP ;
+                          odrl:action odrl:modify ,
+                                      odrl:write ,
+                                      odrl:writeTo ;
+                          odrl:target OBACM:AllDataWithinDPP ;
+                          odrl:relation OBACM:AllDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#EditDataWithinDPP
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ModifyDataWithinDPP
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Customer1
+OBACM:Customer1 rdf:type owl:NamedIndividual ,
+                         OBACM:User ,
+                         odrl:Party ,
+                         <http://www.w3.org/ns/prov#Agent> ,
+                         [ rdf:type owl:Class ;
+                           owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                         <http://www.w3.org/ns/prov#Agent>
+                                         <http://www.w3.org/ns/prov#Entity>
+                                       )
+                         ] ;
+                OBACM:hasContext OBACM:Public ;
+                OBACM:hasRole <http://ju.se/OntologyBasedAccessControlModule#CustomerRole> .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Customer1ViewProductSpecificDataDecision
+OBACM:Customer1ViewProductSpecificDataDecision rdf:type owl:NamedIndividual ,
+                                                        OBACM:AccessDecisionEntity ,
+                                                        <http://www.w3.org/ns/prov#Entity> ,
+                                                        [ rdf:type owl:Class ;
+                                                          owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                        <http://www.w3.org/ns/prov#Agent>
+                                                                        <http://www.w3.org/ns/prov#Entity>
+                                                                      )
+                                                        ] ;
+                                               OBACM:generatedDecision OBACM:Customer1ViewProductSpecificDataRequest ;
+                                               <http://www.w3.org/ns/prov#wasGeneratedBy> OBACM:Customer1ViewProductSpecificDataRequest ;
+                                               <http://www.w3.org/ns/prov#wasInfluencedBy> OBACM:Customer1ViewProductSpecificDataRequest ;
+                                               <http://www.w3.org/ns/prov#value> "Access granted" .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Customer1ViewProductSpecificDataRequest
+OBACM:Customer1ViewProductSpecificDataRequest rdf:type owl:NamedIndividual ,
+                                                       OBACM:UserRequestAction ,
+                                                       <http://www.w3.org/ns/prov#Activity> ,
+                                                       [ rdf:type owl:Class ;
+                                                         owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                       <http://www.w3.org/ns/prov#Agent>
+                                                                       <http://www.w3.org/ns/prov#Entity>
+                                                                     )
+                                                       ] ;
+                                              OBACM:requestedAction odrl:read ;
+                                              OBACM:requestedAsset OBACM:ProductSpecificData ;
+                                              OBACM:requestedBy OBACM:Customer1 ;
+                                              <http://www.w3.org/ns/prov#wasAssociatedWith> OBACM:Customer1 ;
+                                              <http://www.w3.org/ns/prov#wasInfluencedBy> OBACM:Customer1 ;
+                                              OBACM:isPermitted "true"^^xsd:boolean ;
+                                              <http://www.w3.org/ns/prov#startedAtTime> "2025-04-11T11:20:00"^^xsd:dateTime .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CustomerViewPolicy
+OBACM:CustomerViewPolicy rdf:type owl:NamedIndividual ,
+                                  OBACM:AccessControlPolicy ,
+                                  odrl:Policy ;
+                         OBACM:assigneeRole <http://ju.se/OntologyBasedAccessControlModule#CustomerRole> ;
+                         OBACM:hasCondition OBACM:Public ;
+                         odrl:assignee OBACM:Customer1 ;
+                         odrl:permission OBACM:ViewProductSpecificData ;
+                         odrl:function OBACM:Customer1 .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CustomsAuthorityOfficialRole
+OBACM:CustomsAuthorityOfficialRole rdf:type owl:NamedIndividual ,
+                                            OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#CustomsAuthorityViewPolicy
+OBACM:CustomsAuthorityViewPolicy rdf:type owl:NamedIndividual ,
+                                          OBACM:AccessControlPolicy ,
+                                          odrl:Policy ;
+                                 OBACM:assigneeRole OBACM:CustomsAuthorityOfficialRole ;
+                                 OBACM:hasCondition OBACM:NationalCustomsAuthority ;
+                                 odrl:permission OBACM:ViewDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#DistributorRole
+OBACM:DistributorRole rdf:type owl:NamedIndividual ,
+                               OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#DistributorViewPolicy
+OBACM:DistributorViewPolicy rdf:type owl:NamedIndividual ,
+                                     OBACM:AccessControlPolicy ,
+                                     odrl:Policy ;
+                            OBACM:assigneeRole OBACM:DistributorRole ;
+                            OBACM:hasCondition OBACM:CertifiedDistributor ;
+                            odrl:permission OBACM:ViewDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#EditDataWithinDPP
+OBACM:EditDataWithinDPP rdf:type owl:NamedIndividual ,
+                                 odrl:Permission ;
+                        owl:sameAs OBACM:ModifyDataWithinDPP ;
+                        odrl:action odrl:modify ,
+                                    odrl:write ,
+                                    odrl:writeTo ;
+                        odrl:target OBACM:AllDataWithinDPP ;
+                        odrl:relation OBACM:AllDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ModifyDataWithinDPP
+
+###  http://ju.se/Ontology-BasedAccessControlModule#EndOfLifeData
+OBACM:EndOfLifeData rdf:type owl:NamedIndividual ,
+                             OBACM:DPPModules ,
+                             odrl:Asset .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ImporterRole
+OBACM:ImporterRole rdf:type owl:NamedIndividual ,
+                            OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ImporterViewPolicy
+OBACM:ImporterViewPolicy rdf:type owl:NamedIndividual ,
+                                  OBACM:AccessControlPolicy ,
+                                  odrl:Policy ;
+                         OBACM:assigneeRole OBACM:ImporterRole ;
+                         OBACM:hasCondition OBACM:CertifiedImporter ;
+                         odrl:permission OBACM:ViewDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#MaintenanceTechnician1
+OBACM:MaintenanceTechnician1 rdf:type owl:NamedIndividual ,
+                                      OBACM:User ,
+                                      odrl:Party ,
+                                      <http://www.w3.org/ns/prov#Agent> ,
+                                      [ rdf:type owl:Class ;
+                                        owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                      <http://www.w3.org/ns/prov#Agent>
+                                                      <http://www.w3.org/ns/prov#Entity>
+                                                    )
+                                      ] ;
+                             OBACM:hasContext OBACM:CertifiedMaintenanceTechnician ;
+                             OBACM:hasRole OBACM:MaintenanceTechnicianRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#MaintenanceTechnician1EditUseAndMaintenanceDataRequesy
+OBACM:MaintenanceTechnician1EditUseAndMaintenanceDataRequesy rdf:type owl:NamedIndividual ,
+                                                                      OBACM:UserRequestAction ,
+                                                                      <http://www.w3.org/ns/prov#Activity> ,
+                                                                      [ rdf:type owl:Class ;
+                                                                        owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                                      <http://www.w3.org/ns/prov#Agent>
+                                                                                      <http://www.w3.org/ns/prov#Entity>
+                                                                                    )
+                                                                      ] ;
+                                                             OBACM:requestedAction odrl:modify ,
+                                                                                   odrl:write ,
+                                                                                   odrl:writeTo ;
+                                                             OBACM:requestedAsset OBACM:UseAndMaintenanceData ;
+                                                             OBACM:requestedBy OBACM:MaintenanceTechnician1 ;
+                                                             <http://www.w3.org/ns/prov#wasAssociatedWith> OBACM:MaintenanceTechnician1 ;
+                                                             <http://www.w3.org/ns/prov#wasInfluencedBy> OBACM:MaintenanceTechnician1 ;
+                                                             <http://www.w3.org/ns/prov#startedAtTime> "2025-04-11T11:20:00"^^xsd:dateTime .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#MaintenanceTechnicianRole
+OBACM:MaintenanceTechnicianRole rdf:type owl:NamedIndividual ,
+                                         OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#MaintenanceTechnicianViewPolicy
+OBACM:MaintenanceTechnicianViewPolicy rdf:type owl:NamedIndividual ,
+                                               OBACM:AccessControlPolicy ,
+                                               odrl:Policy ;
+                                      OBACM:assigneeRole OBACM:MaintenanceTechnicianRole ;
+                                      OBACM:hasCondition OBACM:CertifiedMaintenanceTechnician ;
+                                      odrl:assignee OBACM:MaintenanceTechnician1 ;
+                                      odrl:permission OBACM:ViewUseAndMaintenanceData ;
+                                      odrl:function OBACM:MaintenanceTechnician1 .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Manufacturer1
+OBACM:Manufacturer1 rdf:type owl:NamedIndividual ,
+                             OBACM:User ,
+                             odrl:Party ,
+                             <http://www.w3.org/ns/prov#Agent> ,
+                             [ rdf:type owl:Class ;
+                               owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                             <http://www.w3.org/ns/prov#Agent>
+                                             <http://www.w3.org/ns/prov#Entity>
+                                           )
+                             ] ;
+                    OBACM:hasContext OBACM:CertifiedManufacturer .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Manufacturer1ModifyDPPDataRequest
+OBACM:Manufacturer1ModifyDPPDataRequest rdf:type owl:NamedIndividual ,
+                                                 OBACM:UserRequestAction ,
+                                                 <http://www.w3.org/ns/prov#Activity> ,
+                                                 [ rdf:type owl:Class ;
+                                                   owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                 <http://www.w3.org/ns/prov#Agent>
+                                                                 <http://www.w3.org/ns/prov#Entity>
+                                                               )
+                                                 ] ;
+                                        OBACM:requestedAction odrl:modify ,
+                                                              odrl:write ,
+                                                              odrl:writeTo ;
+                                        OBACM:requestedAsset OBACM:AllDataWithinDPP ;
+                                        OBACM:requestedBy OBACM:Manufacturer1 ;
+                                        <http://www.w3.org/ns/prov#wasAssociatedWith> OBACM:Manufacturer1 ;
+                                        <http://www.w3.org/ns/prov#wasInfluencedBy> OBACM:Manufacturer1 ;
+                                        OBACM:isPermitted "true"^^xsd:boolean ;
+                                        <http://www.w3.org/ns/prov#startedAtTime> "2025-04-11T11:20:00"^^xsd:dateTime .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ManufacturerFullAccessPolicy
+OBACM:ManufacturerFullAccessPolicy rdf:type owl:NamedIndividual ,
+                                            OBACM:AccessControlPolicy ,
+                                            odrl:Policy ;
+                                   OBACM:assigneeRole OBACM:ManufacturerRole ;
+                                   OBACM:hasCondition OBACM:CertifiedManufacturer ;
+                                   odrl:permission OBACM:CreateDataWithinDPP ,
+                                                   OBACM:EditDataWithinDPP ,
+                                                   OBACM:ModifyDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ManufacturerRole
+OBACM:ManufacturerRole rdf:type owl:NamedIndividual ,
+                                OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#MarketSurveilanceRole
+OBACM:MarketSurveilanceRole rdf:type owl:NamedIndividual ,
+                                     OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#MarketSurveilanceViewPolicy
+OBACM:MarketSurveilanceViewPolicy rdf:type owl:NamedIndividual ,
+                                           OBACM:AccessControlPolicy ,
+                                           odrl:Policy ;
+                                  OBACM:assigneeRole OBACM:MarketSurveilanceRole ;
+                                  OBACM:hasCondition <http://ju.se/OntologyBasedAccessControlModule#CertifiedMarketSurveilanceAgency> ;
+                                  odrl:permission OBACM:ViewDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ModifyDataWithinDPP
+OBACM:ModifyDataWithinDPP rdf:type owl:NamedIndividual ,
+                                   odrl:Permission ;
+                          odrl:action odrl:modify ,
+                                      odrl:write ,
+                                      odrl:writeTo ;
+                          odrl:target OBACM:AllDataWithinDPP ;
+                          odrl:relation OBACM:AllDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#NationalCustomsAuthority
+OBACM:NationalCustomsAuthority rdf:type owl:NamedIndividual ,
+                                        OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ProductSpecificData
+OBACM:ProductSpecificData rdf:type owl:NamedIndividual ,
+                                   OBACM:DPPModules ,
+                                   odrl:Asset .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Public
+OBACM:Public rdf:type owl:NamedIndividual ,
+                      OBACM:Context .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Recycler1
+OBACM:Recycler1 rdf:type owl:NamedIndividual ,
+                         OBACM:User ,
+                         odrl:Party ,
+                         <http://www.w3.org/ns/prov#Agent> ,
+                         [ rdf:type owl:Class ;
+                           owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                         <http://www.w3.org/ns/prov#Agent>
+                                         <http://www.w3.org/ns/prov#Entity>
+                                       )
+                         ] ;
+                OBACM:hasRole OBACM:RecyclerRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Recycler1ViewEndOfLifeDataDecision
+OBACM:Recycler1ViewEndOfLifeDataDecision rdf:type owl:NamedIndividual ,
+                                                  OBACM:AccessDecisionEntity ,
+                                                  <http://www.w3.org/ns/prov#Entity> ,
+                                                  [ rdf:type owl:Class ;
+                                                    owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                  <http://www.w3.org/ns/prov#Agent>
+                                                                  <http://www.w3.org/ns/prov#Entity>
+                                                                )
+                                                  ] ;
+                                         OBACM:generatedDecision OBACM:Recycler1ViewEndOfLifeDataRequest ;
+                                         <http://www.w3.org/ns/prov#wasGeneratedBy> OBACM:Recycler1ViewEndOfLifeDataRequest ;
+                                         <http://www.w3.org/ns/prov#wasInfluencedBy> OBACM:Recycler1ViewEndOfLifeDataRequest ;
+                                         <http://www.w3.org/ns/prov#value> "Access granted" .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Recycler1ViewEndOfLifeDataRequest
+OBACM:Recycler1ViewEndOfLifeDataRequest rdf:type owl:NamedIndividual ,
+                                                 OBACM:UserRequestAction ,
+                                                 <http://www.w3.org/ns/prov#Activity> ,
+                                                 [ rdf:type owl:Class ;
+                                                   owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                 <http://www.w3.org/ns/prov#Agent>
+                                                                 <http://www.w3.org/ns/prov#Entity>
+                                                               )
+                                                 ] ;
+                                        OBACM:requestedAction odrl:read ;
+                                        OBACM:requestedAsset OBACM:EndOfLifeData ;
+                                        OBACM:requestedBy OBACM:Recycler1 ;
+                                        <http://www.w3.org/ns/prov#wasAssociatedWith> OBACM:Recycler1 ;
+                                        <http://www.w3.org/ns/prov#wasInfluencedBy> OBACM:Recycler1 ;
+                                        OBACM:isPermitted "true"^^xsd:boolean ;
+                                        <http://www.w3.org/ns/prov#startedAtTime> "2025-04-11T11:20:00"^^xsd:dateTime .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Recycler2
+OBACM:Recycler2 rdf:type owl:NamedIndividual ,
+                         OBACM:User ,
+                         odrl:Party ,
+                         <http://www.w3.org/ns/prov#Agent> ,
+                         [ rdf:type owl:Class ;
+                           owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                         <http://www.w3.org/ns/prov#Agent>
+                                         <http://www.w3.org/ns/prov#Entity>
+                                       )
+                         ] ;
+                OBACM:hasContext OBACM:CertifiedRecycler ;
+                OBACM:hasRole OBACM:RecyclerRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#Recycler2ViewWrongAsset
+OBACM:Recycler2ViewWrongAsset rdf:type owl:NamedIndividual ,
+                                       OBACM:UserRequestAction ,
+                                       <http://www.w3.org/ns/prov#Activity> ,
+                                       [ rdf:type owl:Class ;
+                                         owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                       <http://www.w3.org/ns/prov#Agent>
+                                                       <http://www.w3.org/ns/prov#Entity>
+                                                     )
+                                       ] ;
+                              OBACM:requestedAction odrl:read ;
+                              OBACM:requestedAsset OBACM:UseAndMaintenanceData ;
+                              OBACM:requestedBy OBACM:Recycler2 ;
+                              <http://www.w3.org/ns/prov#wasAssociatedWith> OBACM:Recycler2 ;
+                              <http://www.w3.org/ns/prov#wasInfluencedBy> OBACM:Recycler2 ;
+                              <http://www.w3.org/ns/prov#startedAtTime> "2025-04-11T11:20:00"^^xsd:dateTime .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#RecyclerRole
+OBACM:RecyclerRole rdf:type owl:NamedIndividual ,
+                            OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#RecyclerViewPolicy
+OBACM:RecyclerViewPolicy rdf:type owl:NamedIndividual ,
+                                  OBACM:AccessControlPolicy ,
+                                  odrl:Policy ;
+                         OBACM:assigneeRole OBACM:RecyclerRole ;
+                         OBACM:hasCondition OBACM:CertifiedRecycler ;
+                         odrl:assignee OBACM:Recycler1 ,
+                                       OBACM:Recycler2 ;
+                         odrl:permission OBACM:ViewEndOfLifeData ;
+                         odrl:function OBACM:Recycler1 ,
+                                       OBACM:Recycler2 .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ServiceProviderPolicy
+OBACM:ServiceProviderPolicy rdf:type owl:NamedIndividual ,
+                                     OBACM:AccessControlPolicy ,
+                                     odrl:Policy ;
+                            OBACM:assigneeRole OBACM:ServiceProviderRole ;
+                            OBACM:hasCondition OBACM:CertifiedServiceProvider ;
+                            odrl:permission OBACM:CreateDataWithinDPP ,
+                                            OBACM:EditDataWithinDPP ,
+                                            OBACM:ModifyDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ServiceProviderRole
+OBACM:ServiceProviderRole rdf:type owl:NamedIndividual ,
+                                   OBACM:UserRole .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#UnauthorizedUser
+OBACM:UnauthorizedUser rdf:type owl:NamedIndividual ,
+                                OBACM:User ,
+                                odrl:Party ,
+                                <http://www.w3.org/ns/prov#Agent> ,
+                                [ rdf:type owl:Class ;
+                                  owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                <http://www.w3.org/ns/prov#Agent>
+                                                <http://www.w3.org/ns/prov#Entity>
+                                              )
+                                ] .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#UnauthorizedUserModifyDataWithinDPPRequest
+OBACM:UnauthorizedUserModifyDataWithinDPPRequest rdf:type owl:NamedIndividual ,
+                                                          OBACM:UserRequestAction ,
+                                                          <http://www.w3.org/ns/prov#Activity> ,
+                                                          [ rdf:type owl:Class ;
+                                                            owl:unionOf ( <http://www.w3.org/ns/prov#Activity>
+                                                                          <http://www.w3.org/ns/prov#Agent>
+                                                                          <http://www.w3.org/ns/prov#Entity>
+                                                                        )
+                                                          ] ;
+                                                 OBACM:requestedAction odrl:modify ,
+                                                                       odrl:write ,
+                                                                       odrl:writeTo ;
+                                                 OBACM:requestedAsset OBACM:AllDataWithinDPP ;
+                                                 <http://www.w3.org/ns/prov#startedAtTime> "2025-04-11T11:20:00"^^xsd:dateTime .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#UseAndMaintenanceData
+OBACM:UseAndMaintenanceData rdf:type owl:NamedIndividual ,
+                                     OBACM:DPPModules ,
+                                     odrl:Asset .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ViewDataWithinDPP
+OBACM:ViewDataWithinDPP rdf:type owl:NamedIndividual ,
+                                 odrl:Permission ;
+                        odrl:action odrl:read ;
+                        odrl:target OBACM:AllDataWithinDPP ;
+                        odrl:relation OBACM:AllDataWithinDPP .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ViewEndOfLifeData
+OBACM:ViewEndOfLifeData rdf:type owl:NamedIndividual ,
+                                 odrl:Permission ;
+                        odrl:action odrl:read ;
+                        odrl:target OBACM:EndOfLifeData ;
+                        odrl:relation OBACM:EndOfLifeData .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ViewProductSpecificData
+OBACM:ViewProductSpecificData rdf:type owl:NamedIndividual ,
+                                       odrl:Permission ;
+                              odrl:action odrl:read ;
+                              odrl:target OBACM:ProductSpecificData ;
+                              odrl:relation OBACM:ProductSpecificData .
+
+
+###  http://ju.se/Ontology-BasedAccessControlModule#ViewUseAndMaintenanceData
+OBACM:ViewUseAndMaintenanceData rdf:type owl:NamedIndividual ,
+                                         odrl:Permission ;
+                                odrl:action odrl:read ;
+                                odrl:target OBACM:UseAndMaintenanceData ;
+                                odrl:relation OBACM:UseAndMaintenanceData .
+
+
+###  http://ju.se/OntologyBasedAccessControlModule#CertifiedMarketSurveilanceAgency
+<http://ju.se/OntologyBasedAccessControlModule#CertifiedMarketSurveilanceAgency> rdf:type owl:NamedIndividual ,
+                                                                                          OBACM:Context .
+
+
+###  http://ju.se/OntologyBasedAccessControlModule#CustomerRole
+<http://ju.se/OntologyBasedAccessControlModule#CustomerRole> rdf:type owl:NamedIndividual ,
+                                                                      OBACM:UserRole .
+
+
+###  http://www.w3.org/ns/odrl/2/modify
+odrl:modify rdf:type owl:NamedIndividual ,
+                     odrl:Action ;
+            owl:sameAs odrl:write ,
+                       odrl:writeTo .
+
+
+###  http://www.w3.org/ns/odrl/2/write
+
+###  http://www.w3.org/ns/odrl/2/writeTo
+
+###  http://www.w3.org/ns/odrl/2/read
+odrl:read rdf:type owl:NamedIndividual ,
+                   odrl:Action .
+
+
+###  http://www.w3.org/ns/odrl/2/write
+odrl:write rdf:type owl:NamedIndividual ,
+                    odrl:Action ;
+           owl:sameAs odrl:writeTo .
+
+
+###  http://www.w3.org/ns/odrl/2/writeTo
+
+###  http://www.w3.org/ns/odrl/2/writeTo
+odrl:writeTo rdf:type owl:NamedIndividual ,
+                      odrl:Action .
+
+
+#################################################################
+#    Rules
+#################################################################
+
+:u rdf:type swrl:Variable .
+
+:r rdf:type swrl:Variable .
+
+:p rdf:type swrl:Variable .
+
+:request rdf:type swrl:Variable .
+
+:per rdf:type swrl:Variable .
+
+:act rdf:type swrl:Variable .
+
+:asset rdf:type swrl:Variable .
+
+:c rdf:type swrl:Variable .
+
+:decision rdf:type swrl:Variable .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "This rule transfer the policy assignee from UserRole to User; If there is a user has role, and then there is an access control policy assigned to that role, then the policy is also assigned to that user." ;
+   rdfs:label "AssignaPolicyToUser" ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate OBACM:User ;
+                           swrl:argument1 :u
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate OBACM:hasRole ;
+                                      swrl:argument1 :u ;
+                                      swrl:argument2 :r
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:ClassAtom ;
+                                                 swrl:classPredicate OBACM:AccessControlPolicy ;
+                                                 swrl:argument1 :p
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                            swrl:propertyPredicate OBACM:assigneeRole ;
+                                                            swrl:argument1 :p ;
+                                                            swrl:argument2 :r
+                                                          ] ;
+                                                rdf:rest rdf:nil
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                           swrl:propertyPredicate odrl:assignee ;
+                           swrl:argument1 :p ;
+                           swrl:argument2 :u
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "This rule checks teh role assigned to teh user to grant permission to the user." ;
+   rdfs:label "RoleBasedAccessLogic" ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate OBACM:UserRequestAction ;
+                           swrl:argument1 :request
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate OBACM:requestedBy ;
+                                      swrl:argument1 :request ;
+                                      swrl:argument2 :u
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate OBACM:hasRole ;
+                                                 swrl:argument1 :u ;
+                                                 swrl:argument2 :r
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate OBACM:AccessControlPolicy ;
+                                                            swrl:argument1 :p
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate OBACM:assigneeRole ;
+                                                                       swrl:argument1 :p ;
+                                                                       swrl:argument2 :r
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                  swrl:propertyPredicate odrl:permission ;
+                                                                                  swrl:argument1 :p ;
+                                                                                  swrl:argument2 :per
+                                                                                ] ;
+                                                                      rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                 rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                             swrl:propertyPredicate odrl:action ;
+                                                                                             swrl:argument1 :per ;
+                                                                                             swrl:argument2 :act
+                                                                                           ] ;
+                                                                                 rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                            rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                                        swrl:propertyPredicate OBACM:requestedAction ;
+                                                                                                        swrl:argument1 :request ;
+                                                                                                        swrl:argument2 :act
+                                                                                                      ] ;
+                                                                                            rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                                       rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                                                   swrl:propertyPredicate odrl:target ;
+                                                                                                                   swrl:argument1 :per ;
+                                                                                                                   swrl:argument2 :asset
+                                                                                                                 ] ;
+                                                                                                       rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                                                  rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                                                              swrl:propertyPredicate OBACM:requestedAsset ;
+                                                                                                                              swrl:argument1 :request ;
+                                                                                                                              swrl:argument2 :asset
+                                                                                                                            ] ;
+                                                                                                                  rdf:rest rdf:nil
+                                                                                                                ]
+                                                                                                     ]
+                                                                                          ]
+                                                                               ]
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate OBACM:isPermitted ;
+                           swrl:argument1 :request ;
+                           swrl:argument2 "true"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "This rule checks the context of the user to grant permission" ;
+   rdfs:label "ContextBasedAccessLogic" ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate OBACM:UserRequestAction ;
+                           swrl:argument1 :request
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                      swrl:propertyPredicate OBACM:requestedBy ;
+                                      swrl:argument1 :request ;
+                                      swrl:argument2 :u
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate OBACM:hasContext ;
+                                                 swrl:argument1 :u ;
+                                                 swrl:argument2 :c
+                                               ] ;
+                                     rdf:rest [ rdf:type swrl:AtomList ;
+                                                rdf:first [ rdf:type swrl:ClassAtom ;
+                                                            swrl:classPredicate OBACM:AccessControlPolicy ;
+                                                            swrl:argument1 :p
+                                                          ] ;
+                                                rdf:rest [ rdf:type swrl:AtomList ;
+                                                           rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                       swrl:propertyPredicate OBACM:hasCondition ;
+                                                                       swrl:argument1 :p ;
+                                                                       swrl:argument2 :c
+                                                                     ] ;
+                                                           rdf:rest [ rdf:type swrl:AtomList ;
+                                                                      rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                  swrl:propertyPredicate odrl:permission ;
+                                                                                  swrl:argument1 :p ;
+                                                                                  swrl:argument2 :per
+                                                                                ] ;
+                                                                      rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                 rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                             swrl:propertyPredicate odrl:action ;
+                                                                                             swrl:argument1 :per ;
+                                                                                             swrl:argument2 :act
+                                                                                           ] ;
+                                                                                 rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                            rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                                        swrl:propertyPredicate OBACM:requestedAction ;
+                                                                                                        swrl:argument1 :request ;
+                                                                                                        swrl:argument2 :act
+                                                                                                      ] ;
+                                                                                            rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                                       rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                                                   swrl:propertyPredicate odrl:target ;
+                                                                                                                   swrl:argument1 :per ;
+                                                                                                                   swrl:argument2 :asset
+                                                                                                                 ] ;
+                                                                                                       rdf:rest [ rdf:type swrl:AtomList ;
+                                                                                                                  rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                                                                                              swrl:propertyPredicate OBACM:requestedAsset ;
+                                                                                                                              swrl:argument1 :request ;
+                                                                                                                              swrl:argument2 :asset
+                                                                                                                            ] ;
+                                                                                                                  rdf:rest rdf:nil
+                                                                                                                ]
+                                                                                                     ]
+                                                                                          ]
+                                                                               ]
+                                                                    ]
+                                                         ]
+                                              ]
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate OBACM:isPermitted ;
+                           swrl:argument1 :request ;
+                           swrl:argument2 "true"^^xsd:boolean
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "" ;
+   rdfs:label "prov:value_AccessDenied" ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate OBACM:UserRequestAction ;
+                           swrl:argument1 :request
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                      swrl:propertyPredicate OBACM:isPermitted ;
+                                      swrl:argument1 :request ;
+                                      swrl:argument2 "false"^^xsd:boolean
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate OBACM:generatedDecision ;
+                                                 swrl:argument1 :decision ;
+                                                 swrl:argument2 :request
+                                               ] ;
+                                     rdf:rest rdf:nil
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate <http://www.w3.org/ns/prov#value> ;
+                           swrl:argument1 :decision ;
+                           swrl:argument2 "Access denied"
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+[ swrla:isRuleEnabled "true"^^xsd:boolean ;
+   rdfs:comment "" ;
+   rdfs:label "prov:value_AccessGranted" ;
+   rdf:type swrl:Imp ;
+   swrl:body [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:ClassAtom ;
+                           swrl:classPredicate OBACM:UserRequestAction ;
+                           swrl:argument1 :request
+                         ] ;
+               rdf:rest [ rdf:type swrl:AtomList ;
+                          rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                                      swrl:propertyPredicate OBACM:isPermitted ;
+                                      swrl:argument1 :request ;
+                                      swrl:argument2 "true"^^xsd:boolean
+                                    ] ;
+                          rdf:rest [ rdf:type swrl:AtomList ;
+                                     rdf:first [ rdf:type swrl:IndividualPropertyAtom ;
+                                                 swrl:propertyPredicate OBACM:generatedDecision ;
+                                                 swrl:argument1 :decision ;
+                                                 swrl:argument2 :request
+                                               ] ;
+                                     rdf:rest rdf:nil
+                                   ]
+                        ]
+             ] ;
+   swrl:head [ rdf:type swrl:AtomList ;
+               rdf:first [ rdf:type swrl:DatavaluedPropertyAtom ;
+                           swrl:propertyPredicate <http://www.w3.org/ns/prov#value> ;
+                           swrl:argument1 :decision ;
+                           swrl:argument2 "Access granted"
+                         ] ;
+               rdf:rest rdf:nil
+             ]
+ ] .
+
+###  Generated by the OWL API (version 4.5.29.2024-05-13T12:11:03Z) https://github.com/owlcs/owlapi
