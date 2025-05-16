@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Resources</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      padding: 1.5rem;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #34568B;
+      font-weight: 600;
+    }
+
+    .pdf-link {
+      margin-bottom: 2rem;
+    }
+
+    .pdf-link p {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .pdf-link a {
+      text-decoration: none;
+      color: #FF6F61;
+      cursor: pointer;
+    }
+
+    .pdf-link a i {
+      font-size: 0.85rem;
+      margin-left: 6px;
+    }
+
+    iframe {
+      display: none;
+      width: 100%;
+      height: 500px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h2>Supplementary Information</h2>
+
+  <div class="pdf-link">
+    <p>
+      <a onclick="togglePDF('pdf1')">SI1. Literature Search Strategy</a>
+      <a href="supplementary-information/SI1_Literature_search_strategy.pdf" target="_blank" title="Open in new tab">
+        <i class="fas fa-up-right-from-square"></i>
+      </a>
+    </p>
+    <iframe id="pdf1" src="supplementary-information/SI1_Literature_search_strategy.pdf"></iframe>
+  </div>
+
+  <div class="pdf-link">
+    <p>
+      <a onclick="togglePDF('pdf2')">SI2. List of Participants</a>
+      <a href="supplementary-information/SI2_List_of_Participants.pdf" target="_blank" title="Open in new tab">
+        <i class="fas fa-up-right-from-square"></i>
+      </a>
+    </p>
+    <iframe id="pdf2" src="supplementary-information/SI2_List_of_Participants.pdf"></iframe>
+  </div>
+
+  <div class="pdf-link">
+    <p>
+      <a onclick="togglePDF('pdf3')">SI3. Interview Questions</a>
+      <a href="supplementary-information/SI3_Interview_questions.pdf" target="_blank" title="Open in new tab">
+        <i class="fas fa-up-right-from-square"></i>
+      </a>
+    </p>
+    <iframe id="pdf3" src="supplementary-information/SI3_Interview_questions.pdf"></iframe>
+  </div>
+
+  <div class="pdf-link">
+    <p>
+      <a onclick="togglePDF('pdf4')">SI4. Access Control Policies</a>
+      <a href="supplementary-information/SI4_Access_Control_Policies.pdf" target="_blank" title="Open in new tab">
+        <i class="fas fa-up-right-from-square"></i>
+      </a>
+    </p>
+    <iframe id="pdf4" src="supplementary-information/SI4_Access_Control_Policies.pdf"></iframe>
+  </div>
+
+  <div class="pdf-link">
+    <p>
+      <a onclick="togglePDF('pdf5')">SI5. Literature Review Results</a>
+      <a href="supplementary-information/SI5_Literature_review_results.pdf" target="_blank" title="Open in new tab">
+        <i class="fas fa-up-right-from-square"></i>
+      </a>
+    </p>
+    <iframe id="pdf5" src="supplementary-information/SI5_Literature_review_results.pdf"></iframe>
+  </div>
+
+  <div class="pdf-link">
+    <p>
+      <a onclick="togglePDF('pdf6')">SI6. Interview Analysis Results</a>
+      <a href="supplementary-information/SI6_Interview_Analysis_Results.pdf" target="_blank" title="Open in new tab">
+        <i class="fas fa-up-right-from-square"></i>
+      </a>
+    </p>
+    <iframe id="pdf6" src="supplementary-information/SI6_Interview_Analysis_Results.pdf"></iframe>
+  </div>
+
+  <div class="pdf-link">
+    <p>
+      <a onclick="togglePDF('pdf7')">SI7. SPARQL Query</a>
+      <a href="supplementary-information/SI7_SPARQL_Query.pdf" target="_blank" title="Open in new tab">
+        <i class="fas fa-up-right-from-square"></i>
+      </a>
+    </p>
+    <iframe id="pdf7" src="supplementary-information/SI7_SPARQL_Query.pdf"></iframe>
+  </div>
+
+  <script>
+    function togglePDF(id) {
+      const iframe = document.getElementById(id);
+      iframe.style.display = iframe.style.display === 'block' ? 'none' : 'block';
+    }
+  </script>
+</body>
+</html>
